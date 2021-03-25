@@ -1,4 +1,5 @@
 #include<iostream>
+#include <cmath>
 using namespace std;
 
 
@@ -71,4 +72,31 @@ double InterpolacjaNewtona(int n, double **xy, double *w, int valuable){
     }
     return y;
 
+}
+
+
+//CAŁKOWANIE NUMERYCZNE
+
+double function(int n, double j, double x[]){
+    double result=0;
+    for (int i=0; i<=n; i++) {
+        result+=pow(j, i)*x[i];
+    }
+    return result;
+}
+
+double methodRectangle(int n, double xp, double xk, double x[]){
+    double result=0;
+    for (int i=xp+1; i<=xk; i++) result+=function(n, i, x);
+    double dx=(xk-xp)/(n);
+    result*=dx;
+    return result;
+}
+
+double methodTrapezoidal(int n, double xp, double xk, double x[]){
+    double result=0;
+    for (int i=xp; i<xk; i++) result+=(function(n, i, x)+function(n, i+1, x))/2;
+    double dx=(xk-xp)/(n);
+    result*=dx;
+    return result;
 }
