@@ -85,6 +85,10 @@ double function(int n, double j, double x[]){
     return result;
 }
 
+double this_function(double x){
+    return x*x*x+2;
+}
+
 double methodRectangle(int n, double xp, double xk, double x[]){
     double result=0;
     for (int i=xp+1; i<=xk; i++) result+=function(n, i, x);
@@ -98,5 +102,27 @@ double methodTrapezoidal(int n, double xp, double xk, double x[]){
     for (int i=xp; i<xk; i++) result+=(function(n, i, x)+function(n, i+1, x))/2;
     double dx=(xk-xp)/(n);
     result*=dx;
+    return result;
+}
+
+double methodSimspon(int n, double xp, double xk){
+    double h=(xk-xp)/n;
+    double result=0;
+    for (int i=0; i<n; i+=2) 
+        result+=this_function(xp+i)+4*this_function(xp+i+1)+this_function(xp+i+2);
+    result*=h/3;
+    return result;
+}
+
+double methodMonteCarlo(int n, double xp, double xk){
+    double valuable;
+    int nextStep=((xk-xp)/n);
+    double result=0;
+    for (int i=xp; i<=n; i+=nextStep){
+        valuable=rand()%(((i+1)*10)-(i*10))+(i*10);
+        valuable/=10;
+        result+=(this_function(valuable)/n);
+    }
+    result*=abs(xk-xp);
     return result;
 }
