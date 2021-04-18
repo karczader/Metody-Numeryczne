@@ -100,3 +100,37 @@ double methodTrapezoidal(int n, double xp, double xk, double x[]){
     result*=dx;
     return result;
 }
+
+//MACIERZE
+
+bool gaussEliminationMethod(int n, double **matrix, double *X){
+    
+  double temp;
+
+    //eliminacja współczynników
+    for(int i=0; i<n-1; i++) 
+    {
+        for(int j =i+1; j<n; j++)
+        {
+            temp=matrix[j][i]/matrix[i][i];
+            for(int k=0; k<= n; k++) matrix[j][k]-=temp*matrix[i][k];
+        }
+    }
+
+    for (int i=0; i<n; i++){
+        if(matrix[i][i]==0) {
+            cout<<"Error: zero is on the diagonal";
+            return false;
+        }
+    }
+
+    //obliczenie niewiadomych
+    for(int i=n-1; i>= 0; i--)
+    {
+        temp=matrix[i][n];
+        for(int j=n-1; j>=i+1; j--) temp-=matrix[i][j]*X[j];
+        X[i]=temp/matrix[i][i];
+    }
+
+    return true;
+}
