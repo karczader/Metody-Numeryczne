@@ -130,7 +130,7 @@ double methodMonteCarlo(int n, double xp, double xk){
     return result;
 }
 
-//MACIERZE
+//ROWNANIA LINIOWE
 
 bool gaussEliminationMethod(int n, double **matrix, double *X){
     
@@ -161,5 +161,62 @@ bool gaussEliminationMethod(int n, double **matrix, double *X){
         X[i]=temp/matrix[i][i];
     }
 
+    return true;
+}
+
+//ROWNANIA NIELINIOWE
+double f(double x)
+{
+  //return sin(x*x-x+1/3.0)+0.5*x;
+  //return x*x*x-3*x*x-2*x+5;
+  
+  return x * x * x * (x + sin(x * x - 1) - 1) - 1;
+
+}
+
+double fp(double x)
+{
+  return x * x * (2 * x * x * cos(x * x - 1) + 3 * sin(x * x - 1) + 4 * x - 3);
+}
+
+bool bisectionMethod(double a, double b, double EPS, double *x){
+
+    if(f(a)*f(b)>0) {
+        cout << "Error: wartosci funkcji na krancach przedzialu maja te same znaki";
+        return false;
+    }
+
+    double x1;
+    while(true) {
+        x1 = (a + b) / 2;
+        if(fabs(f(x1))<EPS) break;
+        if(f(a) *f(x1)<0) b=x1;
+        else a = x1;
+    }
+    *x=x1;
+    return true;
+}
+
+bool newtonRaphsonMethod(double a, double b, double EPS, double *x){
+
+    if(f(a)*f(b)>0) {
+        cout << "Error: wartosci funkcji na krancach przedzialu maja te same znaki";
+        return false;
+    }
+
+    double x0, x1;
+    x0=a;
+    x1 = x0-1; 
+    while ((fabs(x1-x0)>EPS) && (fabs(f(x0))>EPS))
+    {
+        if(fabs(fp(x0))<EPS)
+        {
+            cout<<"Error: zly punkt startowy"<<endl;
+            break;
+        }
+        x1=x0;
+        x0=x0-f(x0)/fp(x0);
+    }
+    *x=x0;
     return true;
 }
