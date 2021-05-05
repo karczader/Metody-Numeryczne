@@ -220,3 +220,52 @@ bool newtonRaphsonMethod(double a, double b, double EPS, double *x){
     *x=x0;
     return true;
 }
+
+//KWADRATURY GAUSSA
+double area(double wspX[], double wspY[]){
+    
+    double waga[2] = {1.0, 1.0};
+    double punkt[2] = {-0.5773502692, 0.5773502692};
+    double fKsztalt[2][2][4];
+    double pochKsi[2][4], pochNi[2][4], funDetJ[2][2];
+    double dxdKsi, dydKsi, dxdNi, dydNi;
+
+    for(int j = 0; j < 2; j++){
+        for(int i = 0; i < 2; i++){
+            fKsztalt[i][j][0] = 0.25*(1.0-punkt[i])*(1.0-punkt[j]);
+            fKsztalt[i][j][1] = 0.25*(1.0+punkt[i])*(1.0-punkt[j]);
+            fKsztalt[i][j][2] = 0.25*(1.0+punkt[i])*(1.0+punkt[j]);
+            fKsztalt[i][j][3] = 0.25*(1.0-punkt[i])*(1.0+punkt[j]);
+
+            pochKsi[j][0] = -0.25*(1.0-punkt[j]);
+            pochKsi[j][1] = 0.25*(1.0-punkt[j]);
+            pochKsi[j][2] = 0.25*(1.0+punkt[j]);
+            pochKsi[j][3] = -0.25*(1.0+punkt[j]);
+            pochNi[i][0] = -0.25*(1.0-punkt[i]);
+            pochNi[i][1] = -0.25*(1.0+punkt[i]);
+            pochNi[i][2] = 0.25*(1.0+punkt[i]);
+            pochNi[i][3] = 0.25*(1.0-punkt[i]);
+        }
+    }
+
+    for(int j = 0; j < 2; j++){
+        for(int i = 0; i < 2; i++){
+            dxdKsi = pochKsi[j][0]*wspX[0] + pochKsi[j][1]*wspX[1] + pochKsi[j][2]*wspX[2] + pochKsi[j][3]*wspX[3];
+            dydKsi = pochKsi[j][0]*wspY[0] + pochKsi[j][1]*wspY[1] + pochKsi[j][2]*wspY[2] + pochKsi[j][3]*wspY[3];
+            dxdNi = pochNi[i][0]*wspX[0] + pochNi[i][1]*wspX[1] + pochNi[i][2]*wspX[2] + pochNi[i][3]*wspX[3];
+            dydNi = pochNi[i][0]*wspY[0] + pochNi[i][1]*wspY[1] + pochNi[i][2]*wspY[2] + pochNi[i][3]*wspY[3];
+            funDetJ[i][j] = dxdKsi*dydNi - dxdNi*dydKsi;
+        }
+    }
+
+    double area = 0.0;
+
+    for(int j = 0; j < 2; j++){
+        for(int i = 0; i < 2; i++){
+            area += abs(funDetJ[i][j])*waga[i]*waga[j];
+        }
+    }
+
+    return area;
+
+}
