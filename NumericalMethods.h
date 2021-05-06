@@ -269,3 +269,20 @@ double area(double wspX[], double wspY[]){
     return area;
 
 }
+
+//METODA ZLOTEGO ŚRODKA
+double myFunction(double x){
+    return x*x-3;
+}
+
+double optymalizacja(double a, double b, double GOLD_NUMBER, double EPS){
+    double xl, xp;
+    while((b-a)>EPS){
+
+        xl=b-GOLD_NUMBER*(b-a);
+        xp=a+GOLD_NUMBER*(b-a);
+        if (myFunction(xl)>myFunction(xp)) a=xl;
+        else b=xp;
+    }
+    return xl;
+}
