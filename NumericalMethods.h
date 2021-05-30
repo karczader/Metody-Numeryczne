@@ -2,6 +2,9 @@
 #include <cmath>
 using namespace std;
 
+double f(double x) {
+    return sin(x * x - x + 1 / 3.0) + 0.5 * x;
+}
 
 //INTERPOLACJA LANGRANGE
 double Langrange(int n, double valuable, double **xy){
@@ -165,14 +168,14 @@ bool gaussEliminationMethod(int n, double **matrix, double *X){
 }
 
 //ROWNANIA NIELINIOWE
-double f(double x)
+/*double f(double x)
 {
   //return sin(x*x-x+1/3.0)+0.5*x;
   //return x*x*x-3*x*x-2*x+5;
   
   return x * x * x * (x + sin(x * x - 1) - 1) - 1;
 
-}
+}*/
 
 double fp(double x)
 {
@@ -285,4 +288,31 @@ double optymalizacja(double a, double b, double GOLD_NUMBER, double EPS){
         else b=xp;
     }
     return xl;
+}
+
+
+//METODA FAŁSZYWEJ PROSTEJ
+double EPS = 1e-14;
+
+
+
+
+
+bool falsi(double a, double b, double &x0){
+    if (f(a) * f(b) > 0) {
+        cout << "Blad";
+        return false;
+    }
+
+    else
+    {
+        while (true)
+        {
+            x0 = (f(a) * b - f(b) * a) / (f(a) - f(b));
+            if (fabs(f(x0)) < EPS) break;
+            if (f(a) * f(x0) < 0) b = x0;
+            else a = x0;
+        }
+        return true;
+    }
 }
