@@ -79,7 +79,6 @@ double InterpolacjaNewtona(int n, double **xy, double *w, int valuable){
 
 
 //CAŁKOWANIE NUMERYCZNE
-
 double function(int n, double j, double x[]){
     double result=0;
     for (int i=0; i<=n; i++) {
@@ -88,10 +87,8 @@ double function(int n, double j, double x[]){
     return result;
 }
 
-double this_function(double x){
-    return x*x*x+2;
-}
 
+//x*x*x+2;
 double methodRectangle(int n, double xp, double xk, double x[]){
     double result=0;
     for (int i=xp+1; i<=xk; i++) result+=function(n, i, x);
@@ -113,7 +110,7 @@ double methodSimspon(int n, double xp, double xk){
     double h=(xk-xp)/n;
     double result=0;
     for (int i=0; i<n; i+=2) 
-        result+=this_function(xp+i)+4*this_function(xp+i+1)+this_function(xp+i+2);
+        result+=f(xp+i)+4*f(xp+i+1)+f(xp+i+2);
     result*=h/3;
     return result;
 }
@@ -127,14 +124,13 @@ double methodMonteCarlo(int n, double xp, double xk){
         valuable=rand()%(((i+1)*10)-(i*10))+(i*10);
         valuable/=10;
         cout<<valuable<<endl;
-        result+=(this_function(valuable)/n);
+        result+=(f(valuable)/n);
     }
     result*=abs(xk-xp);
     return result;
 }
 
 //ROWNANIA LINIOWE
-
 bool gaussEliminationMethod(int n, double **matrix, double *X){
     
   double temp;
@@ -168,20 +164,15 @@ bool gaussEliminationMethod(int n, double **matrix, double *X){
 }
 
 //ROWNANIA NIELINIOWE
-/*double f(double x)
-{
-  //return sin(x*x-x+1/3.0)+0.5*x;
-  //return x*x*x-3*x*x-2*x+5;
-  
-  return x * x * x * (x + sin(x * x - 1) - 1) - 1;
-
-}*/
 
 double fp(double x)
 {
   return x * x * (2 * x * x * cos(x * x - 1) + 3 * sin(x * x - 1) + 4 * x - 3);
 }
 
+//sin(x*x-x+1/3.0)+0.5*x;
+//x*x*x-3*x*x-2*x+5;
+//x * x * x * (x + sin(x * x - 1) - 1) - 1;
 bool bisectionMethod(double a, double b, double EPS, double *x){
 
     if(f(a)*f(b)>0) {
@@ -274,17 +265,15 @@ double area(double wspX[], double wspY[]){
 }
 
 //METODA ZLOTEGO ŚRODKA
-double myFunction(double x){
-    return x*x-3;
-}
 
+//x*x-3;
 double optymalizacja(double a, double b, double GOLD_NUMBER, double EPS){
     double xl, xp;
     while((b-a)>EPS){
 
         xl=b-GOLD_NUMBER*(b-a);
         xp=a+GOLD_NUMBER*(b-a);
-        if (myFunction(xl)>myFunction(xp)) a=xl;
+        if (f(xl)>f(xp)) a=xl;
         else b=xp;
     }
     return xl;
@@ -293,10 +282,6 @@ double optymalizacja(double a, double b, double GOLD_NUMBER, double EPS){
 
 //METODA FAŁSZYWEJ PROSTEJ
 double EPS = 1e-14;
-
-
-
-
 
 bool falsi(double a, double b, double &x0){
     if (f(a) * f(b) > 0) {
@@ -315,4 +300,25 @@ bool falsi(double a, double b, double &x0){
         }
         return true;
     }
+}
+
+//METODA EULERA
+double f(double x, double y)
+{
+    return x*x+y;
+};
+
+double Euler(double x0, double y0, double b, double h, double f(double, double))
+{
+    double n = (b-x0)/h;
+
+    double x1, y1;
+    for (int i = 0; i < n; ++i)
+    {
+        x1 = x0 + h;
+        y1 = y0 + h * f(x0, y0);
+        x0 = x1;
+        y0 = y1;
+    }
+    return y1;
 }
