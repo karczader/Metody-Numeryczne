@@ -322,3 +322,47 @@ double Euler(double x0, double y0, double b, double h, double f(double, double))
     }
     return y1;
 }
+
+//METODA RK2
+
+//cos(x*3.14/180)-sin(x*3.14/180)-y;
+double RK2(double x, double x0, double y0, double h, double f(double, double))
+{
+    double n = (x - x0) / h;
+    double k1, k2, y1;
+    cout<<"Wartosc y w i-tej iteracji: "<<endl;
+    for (int i = 0; i < n; ++i)
+    {
+        k1 = f(x0, y0);
+        k2 = f(x0 + h, y0 + h * k1);
+        y1 = y0 + h/2 * (k1 + k2);
+        y0 = y1;
+        x0 += h;
+        cout<<"y"<<i<<": "<<y1<<endl;
+    }
+    return y1;
+
+}
+
+
+//METODA RK4
+
+//x+y;
+double RK4(double x, double x0, double y0, double h, double f(double, double))
+{
+    double n = (x - x0) / h;
+    double k1, k2, k3, k4, y1;
+    cout<<"Wartosc y w i-tej iteracji: "<<endl;
+    for (int i = 0; i < n; ++i)
+    {
+        k1 = f(x0, y0);
+        k2 = f(x0 + h / 2, y0 + h / 2 * k1);
+        k3 = f(x0 + h / 2, y0 + h / 2 * k2);
+        k4 = f(x0 + h, y0 + h * k3);
+        y1 = y0 + h * (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+        y0 = y1;
+        x0 += h;
+        cout<<"y"<<i<<": "<<y1<<endl;
+    }
+    return y1;
+}
